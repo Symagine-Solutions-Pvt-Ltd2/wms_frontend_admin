@@ -1,21 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View   , TouchableOpacity  , Modal  , FlatList  } from 'react-native';   
-import   React  , { useState , useEffect   , useRef  }   from 'react'; 
-import { Dropdown } from 'react-native-element-dropdown';
-      
 
-  export default function   DropDown(  {  data } ) {   
-    console.log( data )  ; 
+     console.log( data )  ; 
      
-    const [value, setValue] = useState(  null);
-    const [isFocus, setIsFocus] = useState(false);  
+    const [value, setValue] = useState(null);
+    const [isFocus, setIsFocus] = useState(false);
 
-    console.log( value)  ; 
+    const renderLabel = () => {
+      if (value || isFocus) {
+        return (
+          <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+            Dropdown label
+          </Text>
+        );
+      }
+      return null;
+    };
 
-    
     return (
       <View style={styles.container}>
-        
+        {renderLabel()}  
         
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -26,7 +28,8 @@ import { Dropdown } from 'react-native-element-dropdown';
           data={data}
           labelField="label"
           valueField="value"
-          placeholder= "Sex"
+          placeholder={!isFocus ? 'Select item' : '...'}
+          searchPlaceholder="Search..."
           value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -50,7 +53,7 @@ import { Dropdown } from 'react-native-element-dropdown';
        flex : -1 ,
        width : "47%" ,
        height : "100%" ,   
-       backgroundColor : "#fff"  , 
+       backgroundColor : "green"  , 
           borderColor : "grey"  , 
         borderWidth : 1 , 
          borderRadius : 28 ,  
@@ -68,15 +71,20 @@ import { Dropdown } from 'react-native-element-dropdown';
     icon: {
       marginRight: 5,
     },
+    label: {
+      position: 'absolute',
+      backgroundColor: 'white',
+      top: 0 ,
+      zIndex: 999,
+      paddingHorizontal: 8,
+      fontSize: 14,
+    }, 
 
     placeholderStyle: {
       fontSize: 16,
-      fontWeight : "300" ,  
-   
     },
     selectedTextStyle: {
-      fontSize: 16 , 
-  
+      fontSize: 16,
     },
     iconStyle: {
       width: 20,

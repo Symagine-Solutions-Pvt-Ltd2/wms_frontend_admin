@@ -1,8 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';  
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';   
+import Icon from 'react-native-vector-icons/FontAwesome'; 
+
+
 
 
 export default function Home(  {  route  ,  navigation  } ) {
+   
+
+  //console.log( "Home")  ; 
+  // console.log( route.params.token)  ; 
+
+
   return (
     <View style={styles.container}> 
        <StatusBar style="auto" />  
@@ -12,7 +21,6 @@ export default function Home(  {  route  ,  navigation  } ) {
         <Text  style={styles.t2} >Registrations</Text>
        </View>
 
-         
 
        <View style={styles.v2}>
        
@@ -20,9 +28,9 @@ export default function Home(  {  route  ,  navigation  } ) {
         
         < View style={styles.v4}   >  
           <TouchableOpacity   style={styles.to1}   
-                   onPress = {  ( ) => { navigation.navigate("Process")}} 
+                   onPress = {  ( ) => { navigation.navigate("Process"   ,  {  token : route.params.token  ,   name: "Informal Waste Collector"   ,   screentype :  "iwc"}  )}} 
           >
-          <Text>jagjgxha</Text>
+         
           </TouchableOpacity > 
           <Text   style={styles.t1}   >
           Informal Waste Collector
@@ -30,7 +38,8 @@ export default function Home(  {  route  ,  navigation  } ) {
         </View>  
 
         < View style={styles.v4} >  
-          <TouchableOpacity  style={styles.to1} >
+          <TouchableOpacity  style={styles.to1}  
+           onPress = {  ( ) => { navigation.navigate("Process"   ,  {     token : route.params.token  ,  name: "Unit Worker"  ,    screentype :  "uw"}  )}} >
            
           </TouchableOpacity> 
           <Text   style={styles.t1} >
@@ -45,8 +54,10 @@ export default function Home(  {  route  ,  navigation  } ) {
        <View style={styles.v3} >
         
         < View style={styles.v4} >  
-          <TouchableOpacity  style={styles.to1} >
-           
+          <TouchableOpacity  style={styles.to1}  
+            onPress = {  ( ) => { navigation.navigate("Process"   ,  {   token : route.params.token ,    name: "Waste Management Unit"  ,    screentype :  "wmu"}  )}} 
+          >
+     
           </TouchableOpacity> 
           <Text   style={styles.t1} >
           Waste Management Unit
@@ -54,7 +65,10 @@ export default function Home(  {  route  ,  navigation  } ) {
         </View>  
 
         < View style={styles.v4} >  
-          <TouchableOpacity   style={styles.to1} >
+          <TouchableOpacity   style={styles.to1}  
+          onPress = {  ( ) => { navigation.navigate("Process"   ,  {    token : route.params.token ,   name: "Buyers’ List" ,     screentype :  "buy"}  )}} >
+                
+           
            
           </TouchableOpacity> 
           <Text   style={styles.t1} >
@@ -72,8 +86,10 @@ export default function Home(  {  route  ,  navigation  } ) {
         <View  style={styles.v5} >  
            
            <TouchableOpacity   style={styles.to2} >   
-              <Text>  Upload Document</Text>  
-            
+              <Text style={styles.t3}>  Upload Document</Text>  
+              <View  style={styles.v6} >
+              <Icon  name="upload"   size={27} /> 
+              </View> 
               </TouchableOpacity>
      
         </View>
@@ -94,7 +110,7 @@ const styles = StyleSheet.create({
     flex:  -1 ,
     height : "10%"  , 
     width : "80%" , 
-    backgroundColor : "red"  , 
+    backgroundColor : "#fff"  , 
     justifyContent : "flex-end" ,
     alignItems : "flex-start"  ,   
 
@@ -105,7 +121,7 @@ const styles = StyleSheet.create({
     flex:  -1 ,
     height : "60%"  , 
     width : "80%" , 
-    backgroundColor : "pink"  , 
+    backgroundColor : "red"  , 
     justifyContent  :  "space-evenly"  ,   
      
    }   ,  
@@ -115,10 +131,10 @@ const styles = StyleSheet.create({
       
             
     flex:  -1 ,
-    height : "40%"  , 
+    height : "50%"  , 
     width : "100%" , 
-    backgroundColor : "red"  , 
-    justifyContent  :  "space-evenly"  ,  
+    backgroundColor : "#fff"  , 
+    justifyContent  :  "space-between"  ,  
     flexDirection  :  "row"  ,  
     alignItems : "center"
 
@@ -128,10 +144,10 @@ const styles = StyleSheet.create({
        
       flex:  -1 ,
       height : "80%"  , 
-      width : "40%" , 
+      width : "45%" , 
       backgroundColor : "red"  , 
       justifyContent  :  "space-evenly"  ,  
-      backgroundColor : "pink"  , 
+      backgroundColor : "#fff"  , 
       alignItems  : "center"  , 
 
     }   ,   
@@ -143,11 +159,21 @@ const styles = StyleSheet.create({
     flex:  -1 ,
     height : "20%"  , 
     width : "80%" , 
-    backgroundColor : "red"  , 
-    justifyContent  :  "space-evenly"  , 
+    backgroundColor : "#fff"  , 
+    justifyContent  :  "center"  , 
+    alignItems : "center" , 
 
 
     }  ,  
+    
+    
+      v6 : {
+
+        flex:  -1 ,
+        height : "100%"  , 
+        width : "20%" , 
+
+      }  , 
 
 
      t1 :{
@@ -171,11 +197,21 @@ const styles = StyleSheet.create({
       fontSize: 30 , 
      lineHeight: 34 ,
      letterSpacing: -0.408 , 
-    backgroundColor : "pink" 
+    backgroundColor : "#fff" 
 
   
 
-     }  ,  
+     }  ,   
+
+     t3 : {
+
+       width : "80%"  , 
+       height : "100%"  ,  
+       textAlign : "center"  , 
+       textAlignVertical : "center"  , 
+       justifyContent : "center" , 
+
+     }  , 
 
      to1  : {
      
@@ -183,7 +219,8 @@ const styles = StyleSheet.create({
       flex:  -1 ,
       height : "80%"  , 
       width : "100%" ,  
-      backgroundColor  : "blue"  , 
+      backgroundColor  : "#FAEBEF"  , 
+      borderRadius : 15 , 
 
 
      }  , 
@@ -191,10 +228,11 @@ const styles = StyleSheet.create({
       to2 : {
 
         flex:  -1 ,
-      height : "20%"  , 
+      height : "23%"  , 
       width : "60%" ,  
-      backgroundColor  : "blue"  , 
-
+      backgroundColor  : "#333D79"  , 
+      flexDirection : "row"  , 
+      borderRadius :  5 , 
 
       }
 });

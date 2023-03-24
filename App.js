@@ -7,11 +7,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-import Logo from './screens/Logo';
+import Logo from './screens/Logo'; 
+import Hm from './screens/Hm'  ; 
 import  Process from './screens/Process' ;
 import Login from './screens/Login';
 import   Home from './screens/Home' ;
 import Viewlist from './screens/Viewlist' ;
+import Aa from  "./screens/Aa" ;
 
 
 export default function App() { 
@@ -25,7 +27,7 @@ export default function App() {
      <NavigationContainer>
          <Stack.Navigator initialRouteName= "LogIn" > 
 
-    {/*      
+    {/* 
          <Stack.Screen name="Logo" component={Logo}  options={{    headerStyle: {
       backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
        />
@@ -35,20 +37,37 @@ export default function App() {
       <Stack.Screen name="Login"  component={Login }  options={{    headerStyle: {
       backgroundColor: '#fff'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
        />
-           
+
+
+
+         
+       <Stack.Screen name="Aa"  component={  Aa }  options={{    headerStyle: {
+      backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+       />
+    
+
+        
+      <Stack.Screen name="Hm"  component={  Hm }  options={{    headerStyle: {
+      backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+       />
+
 
            <Stack.Screen name="Home" component={ Home }  options={{    headerStyle: {
       backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
        />
            
 
-           <Stack.Screen name="Process" component={ Process }  options={{    headerStyle: {
-      backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+           <Stack.Screen name="Process" component={ Process }  options={  ({ route }) => ({   headerTitle : route.params.name   , 
+           headerStyle: {
+      backgroundColor: '#fff'   }   
+               })}   
        />
   
 
-        <Stack.Screen name="Viewlist" component={ Viewlist }  options={{    headerStyle: {
-      backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+        <Stack.Screen name="Viewlist" component={ Viewlist }  options={ ({ route }) => ({   headerTitle : route.params.name   , 
+           headerStyle: {
+      backgroundColor: '#fff'   }   
+               })}   
        />
 
       </Stack.Navigator>

@@ -1,29 +1,39 @@
 import { StyleSheet, Text, View  , TextInput ,  TouchableOpacity , Pressable   , StatusBar } from 'react-native';
 import   React  , { useState , useEffect }   from 'react';  
-import axios from  "axios"  ; 
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 export default function LogIn(   {  route  ,  navigation  }) {  
   
+  const [ token  , setToken ] = React.useState( "");   //  setting token 
 
+     //login 
+  
+  
+  const [ Password2 , onChangePassword2 ] = React.useState("");     // password   
+  const [  email1, onChangeEmail1 ] = React.useState("");  // email 
+  
   
 
   const [ login  , onChangeLogin ] = React.useState(  false  );
 
     
-  const [ visible  ,   onChangeVisibility ] = React.useState( true ); 
+  const [ visible  ,   onChangeVisibility ] = React.useState( true );   
   
-  
+    // signup 
 
-  const [   name , onChangeName ] = React.useState("");     // password   
+  const [  name , onChangeName ] = React.useState("");     // password   
   const [  email , onChangeEmail ] = React.useState("");  // email 
   const [ password , onChangePassword ] = React.useState("");     // password   
-  const [ password1 , onChangePassword1  ] = React.useState("");     // set password   
+  const [ password1 , onChangePassword1  ] = React.useState("");     // set password  
+  const [ organization  , onChangeOrganization   ] = React.useState("");     //  organization 
  
-
+  
   const [ icon , onChangeIcon] = React.useState( 'eye-slash');  
 
 
+   
+   console.log( email1)  ; 
+   console.log( Password2)  ;
 
 
 
@@ -51,13 +61,130 @@ export default function LogIn(   {  route  ,  navigation  }) {
             
     onChangeLogin(  false)  ; 
         
-   }  ; 
+   }  ;   
+    
+   
+
+  //  admin api  (  signup  )
+   
+  const submit1    = ()  => {
+     
+ 
+      const getdata =  async () => {  
+
+   try {
+     const response = await fetch( 'http://10.0.2.2:8000/admin/registeradmin'  , 
+     {   method: 'POST', 
+
+         headers: {
+           'Accept': 'application/json',
+           'Content-type': 'application/json'  ,
+       
+       }
+   , 
+   body: JSON.stringify({
+      
+    "name": name,
+    "email_id":  email ,
+    "organisation_name": organization ,
+    "password": password ,
+    "confirm_password": password1 , 
+
+ }),
+}
+    );
+     const json = await response.json();
+       console.log(json.message);     
+
+      // if( json.message  === "Registered Successfully.") {
+               
+          
+        console.log( "vbvhv")  ; 
+       //  onChangeLogin(  true)  ; 
+
+      // } else {
+           
+      //   console.log(   json.message )  ;  
+
+     //  }
+   } catch (error) {
+     console.error(error);
+   }  
+ };
+
+
+  getdata()  ;   
+ 
+ 
+
+ 
+ console.log("bhjgnagxaxh")  ;  
+
+}; 
+
+  
+ // login api  
+  
+  
+  const submit2    = ()  => {
+     
+
+    const getdata1 =  async () => {  
+
+     try {
+     const response = await fetch( 'http://10.0.2.2:8000/admin/loginadmin'  , 
+    {   method: 'POST', 
+
+        headers: {
+       'Accept': 'application/json',
+       'Content-type': 'application/json'  ,
+   
+      }
+   , 
+body: JSON.stringify({
+  
+ 
+"email_id":  email1 , 
+"password": Password2 ,
+
+}),
+}
+); 
+ const json = await response.json();
+   //console.log(json);     
+   
+  if(  json.status === "success"){
+    navigation.navigate("Home"  , { token  : json.data.token  })   ; 
+   // console.log(json.data.token);    
+
+  }  
+
+} catch (error) {
+ console.error(error);
+}  
+};
+
+
+getdata1()  ;   
+  
+
+
+
+
+}; 
+
+
+    
+       
+
+
     return (
       <View style={styles.container}>
           
 
        <StatusBar  barStyle="light-content" 
        backgroundColor="#78AFEA"  />   
+    
 
 
    {( login )
@@ -71,27 +198,28 @@ export default function LogIn(   {  route  ,  navigation  }) {
     
     
    <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-                      placeholder="Email Address"   value= { email}  />
+              placeholder="Email Address"    value= { email1 }  onChangeText= { onChangeEmail1 } />
 
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-            placeholder="Password"  value= { password } />      
+            placeholder="Password"  value= { Password2  }   onChangeText = {  onChangePassword2}/>        
 
   <View  style={styles.v3}>
-      
+  <Icon     name="check"  style={{ backgroundColor : "#333D79"   , color : "#fff", padding : 5 ,  }}      size={22} /> 
 <Text> Remember me</Text>      
 
-<TouchableOpacity >
+<TouchableOpacity  
+   onPress = {  ( ) => { navigation.navigate("Hm")}}>
 <Text>Forgot Password?</Text>
 </TouchableOpacity>
     
   </View > 
   
+    
 
       <TouchableOpacity style={styles.to1}  
-             
-             onPress = {  ( ) => { navigation.navigate("Home")}}
-       >
+            onPress = {  submit2 }> 
+       
         <Text>Log In</Text>
       </TouchableOpacity>
     
@@ -116,35 +244,83 @@ export default function LogIn(   {  route  ,  navigation  }) {
    
    
 <View style={styles.v2} >
+  
+<View style={styles.ip6}  >
+<Text style={styles.t1}>Hello Admin!</Text>  
+</View>
+  
+ <View  style={styles.ip1}  >
+    
+ <TextInput  autoCapitalize='none'   autoCorrect={ false}   style={styles.tip1}    
+         placeholder="Name"  value= {   name }   onChangeText = {onChangeName   }/>    
+     
+     <View  style={styles.tip2}    > 
+     <Icon  name="user" size={27} /> 
+      </View>
+ 
+  </View> 
+    
 
-<Text style={styles.t1}> Hello Admin!</Text>  
+   
+  
+<View  style={styles.ip2}  >  
+
+<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+                   placeholder="Email Address"   value= { email }   onChangeText = {  onChangeEmail } />
+  
+ 
+  <View  style={styles.tip2} > 
+  <Icon  name="envelope" size={27} /> 
+  </View>
+    
+  </View>  
+
+  
 
 
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-         placeholder="Name"  value= { password } />      
+<View  style={styles.ip3}  >   
+
+<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+         placeholder="Password"  value= { password }  onChangeText = {  onChangePassword} />        
+
+<View  style={styles.tip2} > 
+  <Icon  name="eye-slash" size={27} /> 
+  </View>
+    
+</View>    
+
+
 
  
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-                   placeholder="Email Address"   value= { email}  />
 
+<View  style={styles.ip4}  >   
+<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+         placeholder="Re-enter  Password"  value= { password1  }  onChangeText = {  onChangePassword1 }/>    
 
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3} 
-         placeholder="Password"  value= { password } />        
+<View  style={styles.tip2} >  
 
-
-
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip4} 
-         placeholder="Re-enter  Password"  value= { password } />      
-
-
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip5} 
-         placeholder="Organisation Name"  value= { password } />      
+  <Icon  name="eye-slash" size={27} /> 
+  </View>
+</View>   
+  
 
 
 
+<View  style={styles.ip5}  >   
+
+<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+         placeholder="Organisation Name"  value= { organization }   onChangeText = {  onChangeOrganization }  />      
+
+<View  style={styles.tip2} >  
+
+<Icon  name="building" size={27} /> 
+</View>
+</View>
 
 
-   <TouchableOpacity style={styles.to3}>
+
+   <TouchableOpacity style={styles.to3}  
+   onPress = {  submit1 }>
      <Text>Sign Up</Text>
    </TouchableOpacity>  
 
@@ -162,8 +338,6 @@ export default function LogIn(   {  route  ,  navigation  }) {
 
 
 </View>  
-
- 
 
 
 </View>
@@ -198,6 +372,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
     height : "90%"  , 
     width : "80%" , 
     backgroundColor : "#fff"  , 
+    alignItems : "center"  , 
    
 
 
@@ -212,7 +387,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
     height : "5%"  , 
     width : "100%" ,  
     top : "34%"  ,  
-    backgroundColor : "red"  ,  
+    backgroundColor : "#fff"  ,  
     flexDirection : "row"  ,
      justifyContent : "space-between"  ,  
      alignItems : 'center'  , 
@@ -225,7 +400,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
     position : "absolute"  , 
     top : "2%"  , 
      fontWeight: '600' ,
-   fontStyle: 'normal'  , 
+     fontStyle: 'normal'  , 
     fontSize: 30 , 
    lineHeight: 34 ,
    letterSpacing: -0.408 ,
@@ -258,6 +433,25 @@ export default function LogIn(   {  route  ,  navigation  }) {
 
 
   }  , 
+  
+
+   tip1 : {
+    
+    width :"90%"  , 
+    height : "100%" ,   
+    borderRadius : 10 ,  
+
+
+
+   }  , 
+  
+   tip2 : { 
+    height :"100%"  , 
+    width : "10%"  , 
+  alignItems : "center"  , 
+  justifyContent : "center"  , 
+
+   }  , 
 
   ip1 : {
       
@@ -266,11 +460,13 @@ export default function LogIn(   {  route  ,  navigation  }) {
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-    paddingLeft : 15 , 
+  
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
-    borderRadius : 10 ,  
+    borderRadius : 10 ,   
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  , 
 
   }  ,   
 
@@ -281,12 +477,12 @@ export default function LogIn(   {  route  ,  navigation  }) {
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-    paddingLeft : 15 , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
-    borderRadius : 10 ,  
-   
+    borderRadius : 10 , 
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  , 
 
   }  ,  
   
@@ -298,12 +494,14 @@ export default function LogIn(   {  route  ,  navigation  }) {
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-    paddingLeft : 15 , 
+   
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
-    borderRadius : 10 ,  
-   
+    borderRadius : 10 ,
+
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  ,
 
   }  ,    
 
@@ -314,13 +512,14 @@ export default function LogIn(   {  route  ,  navigation  }) {
     top : "45%"  ,
     flex : -1 ,
     width : "100%" ,
-    height : "7%" ,  
-    paddingLeft : 15 , 
+    height : "7%" ,   
+
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 10 ,  
-   
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  ,
 
   }  ,    
 
@@ -331,15 +530,26 @@ export default function LogIn(   {  route  ,  navigation  }) {
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-    paddingLeft : 15 , 
+ 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 10 ,  
-   
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  ,
 
   }  ,  
-   
+    
+
+  ip6 : {
+
+    width : "100%" ,
+    height : "7%" , 
+  
+
+
+  }
+  ,  
 
     to1 : {
       
@@ -349,13 +559,15 @@ export default function LogIn(   {  route  ,  navigation  }) {
     flex : -1 ,
     width : "70%" ,
     height : "7%" ,  
-    paddingLeft : 15 , 
+     
+
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 10 ,    
-    backgroundColor : "#333D79"
-   
+    backgroundColor : "#333D79"  , 
+    flexDirection :  "row"   ,  
+    justifyContent : "space-around"  ,
 
     }    , 
 
@@ -365,7 +577,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
       position : "absolute"  , 
       top : "55%" ,
       flex : -1   , 
-      left : "50%"  , 
+      left : "50%"  ,  
       width : "100%" ,
       height : "7%" ,  
       paddingLeft : 15 , 
