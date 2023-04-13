@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import   React  , { useState , useEffect   , useRef  }   from 'react';  
 import { Dropdown } from 'react-native-element-dropdown';
 import * as Location from "expo-location";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
  
 
@@ -25,7 +26,7 @@ export default function  Process(  {  route  ,  navigation  }) {
 
 
 
-  const [location, setLocation] = React.useState(null);
+  const [location, setLocation] = React.useState(null);  // for capturing gps 
   const [errorMsg, setErrorMsg] = React.useState(null);
    
        
@@ -37,7 +38,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const [   state6  , setState6 ] = useState("");
   const [   state7 , setState7 ] = useState("");
   const [   state8  , setState8 ] = useState("");
-  const [   state9  , setState9 ] = useState("Location"); 
+  const [   state9  , setState9 ] = useState( false ); 
   const [   state10 ,setState10 ] = useState("");
 
     
@@ -50,7 +51,11 @@ export default function  Process(  {  route  ,  navigation  }) {
       
   const [value2, setValue2] = React.useState( null);  //  dropdown value  for selecting cardtype
 
-  const [isFocus2, setIsFocus2] = React.useState(false);    //dropdown value  for selecting  cardtype
+  const [isFocus2, setIsFocus2] = React.useState(false);    //dropdown value  for selecting  cardtype  
+
+
+  const [ dropdownValue1  , setDropdownValue1] = React.useState(""); 
+  const [ dropdownValue2  , setDropdownValue2] = React.useState(""); 
  
   React.useEffect(() => {
     (async () => {
@@ -66,8 +71,8 @@ export default function  Process(  {  route  ,  navigation  }) {
       let location = await Location.getCurrentPositionAsync({});
       console.log( location.coords.longitude) ; 
       console.log( location.coords.latitude) ; 
-      setLocation( `${location.coords.longitude},${location.coords.latitude}`);
-   
+      setLocation( `${location.coords.latitude},${location.coords.longitude}`);
+  
     })();
   }, []);
  
@@ -93,7 +98,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   ];  
    
   const dropdowndata2 = [
-    { label: 'Aadhar Card', value: '1' },
+    { label: 'Aadhaar Card', value: '1' },
     { label: 'Voter Card', value: '3' },
   ];  
      
@@ -121,7 +126,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://10.0.2.2:8000/admin/registercollector'  , 
+      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/registercollector'  , 
       {    
         method: 'POST', 
    
@@ -137,10 +142,10 @@ export default function  Process(  {  route  ,  navigation  }) {
       
       "wmu_code": state1 ,
       "wc_name":  state2,
-      "sex":  value1 ,
+      "sex":  dropdownValue1 ,
       "age":   state3,
       "address":   state4,
-      "card_type":   value2 ,
+      "card_type":  dropdownValue2 ,
       "card_no":  state5,
       "contact_no":  state6
   
@@ -153,7 +158,31 @@ export default function  Process(  {  route  ,  navigation  }) {
 
       const json = await response.json(); 
    
-        console.log(json);     
+        console.log(json);   
+        
+
+        if( json.message === "Invalid Token"){
+             
+          alert("Please Log In Again!") ; 
+          navigation.navigate( "Login") ; 
+
+        }else if (   json.message ===  "Registered Successfully."  ){
+
+          alert( json.message) ; 
+          setState1("") ;
+          setState2( "") ;
+          setState3("") ;
+          setState4("")  ;
+          setState5("")  ;
+          setState6("") ;
+          setValue1("")  ;
+         setValue2("")  ; 
+
+        }else{
+          alert( json.message) ; 
+
+        }
+       
    /*  */
     } catch (error) {
       console.error(error);
@@ -189,7 +218,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://10.0.2.2:8000/admin/uworkerreg'  , 
+      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/uworkerreg'  , 
       {    
         method: 'POST', 
    
@@ -205,11 +234,11 @@ export default function  Process(  {  route  ,  navigation  }) {
       
       "wmu_code":  state1 ,
       "uw_name":  state2,
-      "type_of_worker":  state3,
-      "sex":  value1,
+      "type_of_work":  state3,
+      "sex": dropdownValue1,
       "age":  state4,
       "address": state5 ,
-      "card_type": value2 ,
+      "card_type":  dropdownValue2,
       "card_no":   state6 ,
       "contact_no":  state7,
       "mode_of_payment": state8
@@ -223,7 +252,32 @@ export default function  Process(  {  route  ,  navigation  }) {
 
       const json = await response.json(); 
    
-        console.log(json);     
+        console.log(json ); 
+           
+        if( json.message === "Invalid Token"){
+             
+          alert("Please Log In Again!") ; 
+          navigation.navigate( "Login") ; 
+
+        } else if (   json.message ===  "Registered Successfully."  ){
+
+          alert( json.message) ; 
+          setState1("") ;
+          setState2( "") ;
+          setState3("") ;
+          setState4("")  ;
+          setState5("")  ;
+          setState6("") ;
+          setState7("") ;
+          setState8("") ;
+          setValue1("")  ;
+         setValue2("")  ; 
+
+        }
+        else{
+
+          alert( json.message) ; 
+        }  
    /*  */
     } catch (error) {
       console.error(error);
@@ -258,7 +312,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://10.0.2.2:8000/admin/wmureg'  , 
+      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/wmureg'  , 
       {    
         method: 'POST', 
    
@@ -272,7 +326,7 @@ export default function  Process(  {  route  ,  navigation  }) {
     body: JSON.stringify({
        
       "wmu_name":  state1 ,
-      "capture_gps": state9 ,
+      "capture_gps":   location ,
       "organisation":  state3,
       "organisation_head":  state4,
       "address":  state2,
@@ -288,7 +342,31 @@ export default function  Process(  {  route  ,  navigation  }) {
 
       const json = await response.json(); 
    
-        console.log(json);     
+        console.log(json);   
+        
+        if( json.message === "Invalid Token"){
+             
+          alert("Please Log In Again!") ; 
+          navigation.navigate( "Login" ) ; 
+
+        }else if (   json.message ===  "Registered Successfully."  ){
+
+          alert( json.message) ; 
+          setState1("") ;
+          setState2( "") ;
+          setState3("") ;
+          setState4("")  ;
+          setState5("")  ;
+          setState9( false) ;
+      
+
+        }
+        else{
+
+          alert( json.message) ; 
+        }
+        
+         
    /*  */
     } catch (error) {
       console.error(error);
@@ -326,7 +404,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://10.0.2.2:8000/admin/buyersreg'  , 
+      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/buyersreg'  , 
       {    
         method: 'POST', 
    
@@ -353,7 +431,28 @@ export default function  Process(  {  route  ,  navigation  }) {
 
       const json = await response.json(); 
    
-        console.log(json);     
+        console.log(json);  
+        
+        if( json.message === "Invalid Token"){
+             
+          alert("Please Log In Again!") ; 
+          navigation.navigate( "Login") ; 
+
+        } else if (   json.message ===  "Registered Successfully."  ){
+
+          alert( json.message) ; 
+          setState1("") ;
+          setState2( "") ;
+          setState3("") ;
+          setState4("")  ;
+          setState5("")  ;
+      
+
+        } 
+        else{
+
+          alert( json.message) ; 
+        }
    /*  */
     } catch (error) {
       console.error(error);
@@ -367,8 +466,13 @@ export default function  Process(  {  route  ,  navigation  }) {
 
 
 
- const gpsHandler = () => { 
-    setState9( location) ;
+ const gpsHandler = () => {
+  
+  console.log( state9) ; 
+  if(  state9 ===  false){
+    setState9( !state9) ;
+  }
+    
        alert("Successfully captured GPS!") ; 
  }
 
@@ -395,9 +499,12 @@ export default function  Process(  {  route  ,  navigation  }) {
 
   <View style={styles.v1}>
            
-  <Icon  name="list" size={27}  />
-  <TouchableOpacity onPress = {  ( ) => { navigation.navigate("Viewlist"   , {  token : token ,    name :"Informal Waste Collector"  ,    api_end : "wastecollectorview"})}} >   
-            <Text> View List</Text> 
+  
+  <TouchableOpacity style ={ styles.to7}
+   onPress = {  ( ) => { navigation.navigate("Viewlist"   , {  token : token ,    name :"Informal Waste Collector"  ,    api_end : "wastecollectorview"})}} >   
+
+  <MaterialCommunityIcons name="format-list-bulleted" size={30} color="#000000" />
+            <Text>View List</Text> 
   </TouchableOpacity> 
 
 
@@ -408,7 +515,8 @@ export default function  Process(  {  route  ,  navigation  }) {
    <View style={styles.v2} > 
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
- onChangeText = {  setState1 }  value = { state1 }      placeholder="Code of Waste Management Unit"  />    
+ onChangeText = {  setState1 }  value = { state1 }  
+     placeholder="Code of Waste Management Unit"  />    
     
 
 
@@ -441,6 +549,8 @@ export default function  Process(  {  route  ,  navigation  }) {
           onFocus={() => setIsFocus1(true)}
           onBlur={() => setIsFocus1(false)}
           onChange={item => {
+
+            setDropdownValue1( item.label ); 
             setValue1(item.value);
             setIsFocus1(false);
           }}
@@ -452,14 +562,14 @@ export default function  Process(  {  route  ,  navigation  }) {
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
        onChangeText = {  setState3 }  value = { state3 }   
-            placeholder="Age"     />   
+            placeholder="Age"    keyboardType="number-pad"   />   
 
   </View>     
     
 
     
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2}  
-      onChangeText = {  setState4 }  value = { state4 }   
+      onChangeText = {  setState4 }  value = { state4 }  
             placeholder="Address"   />    
 
     
@@ -477,11 +587,13 @@ iconStyle={styles.iconStyle}
 data={ dropdowndata2}
 labelField="label"
 valueField="value"
-placeholder=  "Identity Card Type"
+placeholder=  "ID Card Type"
 value={value2}
 onFocus={() => setIsFocus2(true)}
 onBlur={() => setIsFocus2(false)}
-onChange={item => {
+onChange={item => { 
+
+  setDropdownValue2( item.label) ; 
  setValue2(item.value);
  setIsFocus2(false);
 }}
@@ -493,15 +605,15 @@ onChange={item => {
               
                           
               <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1}  
-                  onChangeText = {  setState5 }  value = { state5 }   
+                  onChangeText = {  setState5 }  value = { state5 } 
                           placeholder="Card Number"  />   
               
 </View> 
 
   
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2}  
-              onChangeText = {  setState6 }  value = { state6 }   
-            placeholder="Contact Number"    />    
+              onChangeText = {  setState6 }  value = { state6 }  
+            placeholder="Contact Number"     keyboardType="number-pad"   />    
  
 
 
@@ -514,7 +626,7 @@ onChange={item => {
         onPress = {  ()  =>  { submit1() } }
 
     >
-      <Text>
+      <Text  style={styles.t2}   >
       Register
       </Text>
     </TouchableOpacity>
@@ -557,12 +669,13 @@ onChange={item => {
     
   <View style={styles.v1} >
         
-   <Icon  name="list" size={27}  />
-   <TouchableOpacity
+   
+   <TouchableOpacity style={ styles.to7}
         
       onPress = {  ( ) => { navigation.navigate("Viewlist"  , {   token : token ,    name :"Unit Worker"  ,   api_end : "unitworkerview"})}}
       >   
-            <Text> View List</Text> 
+        <MaterialCommunityIcons name="format-list-bulleted" size={30} color="#000000" />
+            <Text>View List</Text> 
    </TouchableOpacity> 
  
    
@@ -573,17 +686,17 @@ onChange={item => {
     
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3}  
-       onChangeText = {  setState1 }  value = { state1 }   
+       onChangeText = {  setState1 }  value = { state1 } 
         placeholder="Code of Waste Management Unit"  />     
 
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3} 
-  onChangeText = {  setState2 }  value = { state2 }   
+  onChangeText = {  setState2 }  value = { state2 }     
         placeholder="Name of Worker"  />    
 
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3} 
-  onChangeText = {  setState3}  value = { state3 }   
+  onChangeText = {  setState3}  value = { state3 }    
         placeholder="Type of Work"  />    
 
 
@@ -606,6 +719,8 @@ value={value1}
 onFocus={() => setIsFocus1(true)}
 onBlur={() => setIsFocus1(false)}
 onChange={item => {
+
+  setDropdownValue1( item.label ) ; 
  setValue1(item.value);
  setIsFocus1(false);
 }}
@@ -618,8 +733,8 @@ onChange={item => {
                
                
                <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-                 onChangeText = {  setState4 }  value = { state4 }   
-                           placeholder="Age"   />   
+                 onChangeText = {  setState4 }  value = { state4 } 
+                           placeholder="Age"     keyboardType="number-pad"  />   
                
                  </View>   
 
@@ -643,11 +758,13 @@ iconStyle={styles.iconStyle}
 data={ dropdowndata2}
 labelField="label"
 valueField="value"
-placeholder=  "Identity Card Type"
+placeholder=  "ID Card Type"
 value={value2}
 onFocus={() => setIsFocus2(true)}
 onBlur={() => setIsFocus2(false)}
 onChange={item => {
+
+ setDropdownValue2( item.label ) ; 
  setValue2(item.value);
  setIsFocus2(false);
 }}
@@ -660,14 +777,14 @@ onChange={item => {
               
                
                <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-                 onChangeText = {  setState6}  value = { state6 }   
+                 onChangeText = {  setState6}  value = { state6 }  
                            placeholder="Card Number"   />   
                
                  </View>   
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3} 
-  onChangeText = {  setState7 }  value = { state7}   
-        placeholder="Contact Number"  />      
+  onChangeText = {  setState7 }  value = { state7}     
+        placeholder="Contact Number"   keyboardType="number-pad"   />      
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip3} 
   onChangeText = {  setState8 }  value = { state8 }   
@@ -681,7 +798,7 @@ onChange={item => {
 <TouchableOpacity  style={styles.to1} 
     onPress = {  ()  =>  { submit2() } }
 >
-  <Text>
+  <Text   style={styles.t2} >
   Register
   </Text>
 </TouchableOpacity>
@@ -726,9 +843,13 @@ onChange={item => {
     
       <View style={styles.v1}>
                
-      <Icon  name="list" size={27}  />
-      <TouchableOpacity onPress = {  ( ) => { navigation.navigate("Viewlist"  ,  {   token : token  ,   name :"Waste Management Unit"   ,   api_end : "wmuview"})}} >   
-                <Text> Viewlist</Text> 
+     
+      <TouchableOpacity  style= { styles.to7}
+       onPress = {  ( ) => { navigation.navigate("Viewlist"  ,  {   token : token  ,   name :"Waste Management Unit"   ,   api_end : "wmuview"})}} > 
+
+        <MaterialCommunityIcons name="format-list-bulleted" size={30} color="#000000" />
+           
+                <Text> View List</Text> 
       </TouchableOpacity> 
     
     
@@ -748,28 +869,26 @@ onChange={item => {
          
        >   
        
-                    <Text  style={styles.t1}  >gps</Text>
+                    <Text  style={styles.t1} >Capture GPS</Text>
 
                   </TouchableOpacity>
                   
                   
-                  <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.gpsInput }  
+                  <TextInput style={styles.gpsInput }  
                       
-                              placeholder={ state9 }    />    
-
-
-                  
+                      editable= { false}
+                      placeholder={ ( state9 )? location : "Location" }   />    
                     </View>     
 
     
     <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2}  
-        onChangeText = {  setState1 }  value = { state1 }   
+        onChangeText = {  setState1 }  value = { state1 } 
                placeholder="Name of Unit"  />    
         
     
     
     <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-     onChangeText = {  setState2 }  value = { state2 }   
+     onChangeText = {  setState2 }  value = { state2 }  
                 placeholder="Address"  />     
     
     
@@ -783,7 +902,7 @@ onChange={item => {
     
       
     <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-     onChangeText = {  setState4 }  value = { state4 }   
+     onChangeText = {  setState4 }  value = { state4 }
                 placeholder="Head of the Organisation"    />    
       
     
@@ -791,7 +910,7 @@ onChange={item => {
       
     <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
      onChangeText = {  setState5 }  value = { state5 }   
-                placeholder="Contact Number"    />    
+                placeholder="Contact Number"     keyboardType="number-pad"   />    
      
     
     
@@ -803,7 +922,7 @@ onChange={item => {
         <TouchableOpacity  style={styles.to1} 
              onPress = {  ()  =>  { submit3() } }
         >
-          <Text>
+          <Text  style={styles.t2}>
           Register
           </Text>
         </TouchableOpacity>
@@ -862,10 +981,11 @@ onChange={item => {
         
   
     <View style={styles.v1}>
-             
-    <Icon  name="list" size={27}  />
-    <TouchableOpacity onPress = {  ( ) => { navigation.navigate("Viewlist" ,  {     token : token  ,   name :"Buyers’ List"  ,     api_end : "buyersview"} )}} >   
-              <Text> View List</Text> 
+
+    <TouchableOpacity  style={ styles.to7}  onPress = {  ( ) => { navigation.navigate("Viewlist" ,  {     token : token  ,   name :"Buyer's List"  ,     api_end : "buyersview"} )}} >           
+    <MaterialCommunityIcons name="format-list-bulleted" size={30} color="#000000" />
+
+              <Text>View List</Text> 
     </TouchableOpacity> 
   
   
@@ -889,7 +1009,7 @@ onChange={item => {
     
       
   <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-   onChangeText = {  setState3 }  value = { state3 }   
+   onChangeText = {  setState3 }  value = { state3 }  
               placeholder="Contact Person"   />    
   
           
@@ -897,7 +1017,7 @@ onChange={item => {
     
   <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
    onChangeText = {  setState4}  value = { state4 }   
-              placeholder="Contact Number"    />    
+              placeholder="Contact Number"   keyboardType="number-pad"   />    
    
   
     
@@ -915,7 +1035,7 @@ onChange={item => {
       <TouchableOpacity  style={styles.to1}
             onPress = {  ()  =>  { submit4() } }
       >
-        <Text>
+        <Text style={styles.t2}>
         Register
         </Text>
       </TouchableOpacity>
@@ -944,7 +1064,7 @@ const styles = StyleSheet.create({
 
   v1 : {
    
-    width : "100%"  , 
+    width : "80%"  , 
     height : "10%"  , 
     backgroundColor : "#fff"  ,  
     flexDirection : "row"  , 
@@ -1037,6 +1157,7 @@ const styles = StyleSheet.create({
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 28 ,  
+    paddingLeft : 15 , 
 
   }  ,    
 
@@ -1045,14 +1166,16 @@ const styles = StyleSheet.create({
 
     
     flex : -1 ,
-    width : "50%" ,
+    width : "57%" ,
     height : "100%" ,  
     backgroundColor : "#fff"  , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 28 ,
-    padding : 5 ,   
+    padding : 5 ,  
+
+    
    
 
    }  , 
@@ -1064,7 +1187,7 @@ const styles = StyleSheet.create({
     width : "100%" ,
     height : "10%" ,  
     paddingLeft : 15 , 
-    textAlign : "left"  , 
+    textAlign : "center" , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 28 ,  
@@ -1079,7 +1202,7 @@ const styles = StyleSheet.create({
     width : "80%" ,
     height : "8%" ,  
     paddingLeft : 15 , 
-    textAlign : "left"  , 
+    textAlign : "center"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 28 ,  
@@ -1128,7 +1251,7 @@ const styles = StyleSheet.create({
 
           
       flex : -1 ,
-      width : "47%" ,
+      width : "40%" ,
       height : "100%" ,   
       backgroundColor : "#333D79"  , 
          borderColor : "grey"  , 
@@ -1138,11 +1261,32 @@ const styles = StyleSheet.create({
         justifyContent : "center"  , 
 
 
+     }   , 
+
+
+     to7: {
+
+      flexDirection : "row"  ,
+      alignItems : "center" 
      }
     , 
     t1 : {
      color : "#fff"
     
+    }  , 
+
+    t2 : {
+    
+      color : "#FFFFFF"  ,
+      fontWeight: '800' ,
+     fontStyle: 'normal'  , 
+      fontSize : 16 , 
+     lineHeight: 22 , 
+     textAlign: 'center' , 
+     letterSpacing: -0.408 ,
+
+
+
     }
    , 
 
@@ -1157,11 +1301,14 @@ const styles = StyleSheet.create({
   },
 
   placeholderStyle: {
-    fontSize: 12,
-    fontWeight : "300" ,  
+    fontSize: 14,
+    color: "#0000004D"  , 
+    fontWeight : "500" ,  
+    textAlign : "center" , 
  
   },
   selectedTextStyle: {
+    textAlign : "center" , 
     fontSize: 16 , 
 
   },

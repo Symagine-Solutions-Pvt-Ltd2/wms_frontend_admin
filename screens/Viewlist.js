@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View  , FlatList   , TextInput  , Dimensions, TouchableOpacity   } from 'react-native'; 
+
+import { StyleSheet, Text, View  , FlatList   , TextInput  , Dimensions, TouchableOpacity  , StatusBar   } from 'react-native'; 
 import   React  , { useState , useEffect   ,  }   from 'react'; 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -10,6 +10,7 @@ export default function Viewlist( {  route  ,  navigation  }) {
 
   const [   data  , setData  ] = useState([]) ;   //   data  for showing all the info     
   const [   loading   , setLoading   ] = useState( true ) ;  
+  const [   pageNo   , setPageNo   ] = useState( 1 ) ;  
  
   console.log( "Viewlist")  ; 
   console.log( route.params.token)  ; 
@@ -17,7 +18,7 @@ export default function Viewlist( {  route  ,  navigation  }) {
 
   let api_end =  route.params.api_end  ; 
 
-  const  base_url  = `http://10.0.2.2:8000/admin/${api_end}` ; 
+  const  base_url  = `http://clean-sundarbans.com:5000/admin/${api_end}` ; 
     
   
 
@@ -34,7 +35,7 @@ export default function Viewlist( {  route  ,  navigation  }) {
     body: JSON.stringify({
        
       search_key :"",
-      page_no :"1",
+      page_no :  pageNo ,
       limit :"10"
  
   }),
@@ -43,9 +44,24 @@ export default function Viewlist( {  route  ,  navigation  }) {
       const json = await response.json();
 
         
-      console.log("ayhusgg") ; 
-        console.log(json.data);  
-       setData( json.data)
+      console.log("ayhusgg") ;   
+
+      console.log( json ) ; 
+
+      if( json.message === "Invalid Token"){
+             
+        
+        alert("Please Log In Again!") ; 
+        navigation.navigate( "Login") ; 
+        
+
+      }else{
+       
+        setData( json.data)
+        alert( json.message) ; 
+      }  
+        console.log(json.data);    
+      
     } catch (error) {
       console.error(error);
     }  
@@ -54,31 +70,52 @@ export default function Viewlist( {  route  ,  navigation  }) {
   useEffect(() => {
     getData();  
 
-  }, [ ]);
+  }, [  pageNo ]);
 
-   
+     
+
+  const handler1 = () => {
+    
+    console.log( "handler1") ;
+    
+    if(  pageNo >= 2){
+
+      setPageNo(  pageNo - 1)  ; 
+    }
+        
+   }
+
+   const  handler2 = () => {
+      
+    console.log( "handler2" ) ;
+
+ 
+
+      setPageNo(  pageNo + 1 )  ; 
+    
+        
+   }
+  
+     
+
+
 
   return (
     <View style={styles.container}> 
   
-      <StatusBar style="auto" />  
+  <StatusBar 
+        barStyle="dark-content"  
+        backgroundColor = '#fff'
+       />
 
-      <View style={styles.v1}>  
-          
-         
-   <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-                      placeholder="Search"    />
-        <Text>  search bar </Text>
-
-      </View>     
-
+      
         <View style={styles.v5}> 
 
         <Text style={styles.t1} >Name</Text>
         <Text  style={styles.t2}>Code</Text>
         <Text  style={styles.t3}>Status</Text>
         <View  style={styles.t4}>
-        <Icon  name="link" size={24}  color="#fff"/> 
+        <Icon  name="link" size={22}  color="#fff"/> 
         </View>
         </View>  
 
@@ -116,8 +153,8 @@ export default function Viewlist( {  route  ,  navigation  }) {
          <View  key={ el.id  }  style={styles.v3 }  > 
          
            <Text style={styles.t5} > {  el.prop1 } </Text> 
-           <Text style={styles.t6}> {   el.prop2}  </Text>   
-           <Text style={styles.t7}> {   el.prop3 }  </Text>
+           <Text style={styles.t6}> {   el.prop3}  </Text>   
+           <Text style={styles.t7}> {   el.prop2 }  </Text>
            <View style={styles.t8}>
            <Icon  name="arrow-right" size={27} /> 
             </View>
@@ -135,13 +172,17 @@ export default function Viewlist( {  route  ,  navigation  }) {
 
        <View  style={styles.v4}>
          
-         <TouchableOpacity style={styles.to1}>
-         <Icon  name="arrow-left" size={27} /> 
+         <TouchableOpacity style={styles.to1} 
+           onPress = {  ()  =>  { handler1() } }
+         >
+         <Icon  name="arrow-left" size={22}   color="#fff"/> 
 
          </TouchableOpacity> 
 
-         <TouchableOpacity style={styles.to2}>
-         <Icon  name="arrow-right" size={27} /> 
+         <TouchableOpacity style={styles.to2} 
+             onPress = {  ()  =>  { handler2() } }
+         >
+         <Icon  name="arrow-right" size={22 }  color="#fff" /> 
 
          </TouchableOpacity>
       </View>
@@ -218,7 +259,8 @@ const styles = StyleSheet.create({
     height : "5%" ,  
       backgroundColor : "#fff" , 
       flexDirection : "row" , 
-      justifyContent : "space-around"
+      justifyContent : "space-around" , 
+      marginTop  : 10 , 
 
    }
      , 
@@ -243,6 +285,15 @@ const styles = StyleSheet.create({
        height : "100%"  , 
        width : "38%" ,
        backgroundColor : "#333D79" , 
+       color : "#FFFFFF"  ,
+       fontWeight: '800' ,
+      fontStyle: 'normal'  , 
+       fontSize : 16 , 
+      lineHeight: 22 , 
+      textAlign: 'center' , 
+      textAlignVertical: "center"  , 
+      letterSpacing: -0.408 ,
+      borderRadius : 5 , 
 
 
     } , 
@@ -252,7 +303,15 @@ const styles = StyleSheet.create({
       height : "100%"  , 
       width : "30%" ,
       backgroundColor : "#333D79" , 
-
+      color : "#FFFFFF"  ,
+      fontWeight: '800' ,
+     fontStyle: 'normal'  , 
+      fontSize : 16 , 
+     lineHeight: 22 , 
+     textAlign: 'center' , 
+     textAlignVertical: "center"  , 
+     letterSpacing: -0.408 ,
+     borderRadius : 5 , 
 
    }  , 
 
@@ -261,7 +320,15 @@ const styles = StyleSheet.create({
     height : "100%"  , 
     width : "20%" ,
     backgroundColor : "#333D79" , 
-
+    color : "#FFFFFF"  ,
+    fontWeight: '800' ,
+   fontStyle: 'normal'  , 
+    fontSize : 16 , 
+   lineHeight: 22 , 
+   textAlign: 'center' , 
+   textAlignVertical: "center"  , 
+   letterSpacing: -0.408 ,
+   borderRadius : 5 , 
 
  }  ,  
 
@@ -270,7 +337,15 @@ const styles = StyleSheet.create({
   height : "100%"  , 
   width : "8%" ,
   backgroundColor : "#333D79" , 
-
+  color : "#FFFFFF"  ,
+  fontWeight: '800' ,
+ fontStyle: 'normal'  , 
+  fontSize : 16 , 
+ lineHeight: 22 , 
+  alignItems : "center"  , 
+  justifyContent : "center"  , 
+ letterSpacing: -0.408 ,
+ borderRadius : 5 , 
 
  }  , 
   
@@ -280,6 +355,8 @@ const styles = StyleSheet.create({
   height : "100%"  , 
   width : "38%" ,
   backgroundColor : "#fff" , 
+ textAlign : "center" , 
+ textAlignVertical : "center" , 
 
 
 } , 
@@ -289,6 +366,8 @@ t6 : {
  height : "100%"  , 
  width : "30%" ,
  backgroundColor : "#fff" , 
+ textAlign : "center" , 
+ textAlignVertical : "center" ,  
 
 
 }  , 
@@ -298,6 +377,8 @@ t7 : {
 height : "100%"  , 
 width : "20%" ,
 backgroundColor : "#fff" , 
+textAlign : "center" , 
+ textAlignVertical : "center" , 
 
 
 }  ,  
@@ -307,6 +388,8 @@ t8 : {
 height : "100%"  , 
 width : "8%" ,
 backgroundColor : "#fff" , 
+alignItems : "center" , 
+justifyContent : "center"  , 
 
 
 }  , 
@@ -319,6 +402,8 @@ backgroundColor : "#fff" ,
     width : "20%"  , 
      backgroundColor : "#333D79" , 
      borderRadius : 8 , 
+     alignItems : "center"  , 
+     justifyContent : "center"  ,
 
 
   }  , 
@@ -329,7 +414,8 @@ backgroundColor : "#fff" ,
     width : "20%"  , 
      backgroundColor : "#333D79" , 
      borderRadius : 8 , 
-
+     alignItems : "center"  , 
+     justifyContent : "center"  ,
 
   }
   , 

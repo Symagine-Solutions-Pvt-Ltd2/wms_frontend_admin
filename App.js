@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
+
 import Logo from './screens/Logo'; 
 import Hm from './screens/Hm'  ; 
 import  Process from './screens/Process' ;
@@ -14,6 +15,8 @@ import Login from './screens/Login';
 import   Home from './screens/Home' ;
 import Viewlist from './screens/Viewlist' ;
 import Aa from  "./screens/Aa" ;
+import About from  "./screens/About" ;
+import UserRequest from './screens/UserRequest';
 
 
 export default function App() { 
@@ -53,13 +56,24 @@ export default function App() {
 
 
            <Stack.Screen name="Home" component={ Home }  options={{    headerStyle: {
-      backgroundColor: '#78AFEA'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+      backgroundColor: '#333D79'    } ,   headerBackVisible : false ,     headerTintColor:  '#333D79'   , headerShadowVisible : false  }}   
        />
-           
+            
+
+            <Stack.Screen name="About" component={ About }  options={{    headerStyle: {
+      backgroundColor: '#333D79'   } ,      headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+       />  
+
+
+        
+        <Stack.Screen name="Sign Up Request" component={ UserRequest }  options={{    headerStyle: {
+      backgroundColor: '#333D79'    } ,     headerTintColor:  '#fff'   , headerShadowVisible : false  }}   
+       />
+            
 
            <Stack.Screen name="Process" component={ Process }  options={  ({ route }) => ({   headerTitle : route.params.name   , 
            headerStyle: {
-      backgroundColor: '#fff'   }   
+      backgroundColor: '#fff'       }   
                })}   
        />
   

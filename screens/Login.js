@@ -2,22 +2,25 @@ import { StyleSheet, Text, View  , TextInput ,  TouchableOpacity , Pressable   ,
 import   React  , { useState , useEffect }   from 'react';  
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 
+
 export default function LogIn(   {  route  ,  navigation  }) {  
   
   const [ token  , setToken ] = React.useState( "");   //  setting token 
+  const [ login  , onChangeLogin ] = React.useState(   true  );  // to toogle between signup and login 
 
      //login 
   
   
   const [ Password2 , onChangePassword2 ] = React.useState("");     // password   
   const [  email1, onChangeEmail1 ] = React.useState("");  // email 
-  
+  const [ visible  ,   onChangeVisibility ] = React.useState( true );   
+  const [ icon , onChangeIcon] = React.useState( 'eye-slash');  
   
 
-  const [ login  , onChangeLogin ] = React.useState(  false  );
+  
 
     
-  const [ visible  ,   onChangeVisibility ] = React.useState( true );   
+  
   
     // signup 
 
@@ -26,12 +29,16 @@ export default function LogIn(   {  route  ,  navigation  }) {
   const [ password , onChangePassword ] = React.useState("");     // password   
   const [ password1 , onChangePassword1  ] = React.useState("");     // set password  
   const [ organization  , onChangeOrganization   ] = React.useState("");     //  organization 
- 
-  
-  const [ icon , onChangeIcon] = React.useState( 'eye-slash');  
+  const [ visible1  ,   onChangeVisibility1 ] = React.useState( true );   
+  const [ icon1 , onChangeIcon1] = React.useState( 'eye-slash');  
+  const [ visible2  ,   onChangeVisibility2 ] = React.useState( true );   
+  const [ icon2 , onChangeIcon2] = React.useState( 'eye-slash');  
 
 
    
+
+
+
    console.log( email1)  ; 
    console.log( Password2)  ;
 
@@ -50,7 +57,44 @@ export default function LogIn(   {  route  ,  navigation  }) {
       onChangeVisibility( true ) ; 
     }
         
-   }  ; 
+   }  ;  
+
+
+  
+   const handlePasswordVisibility1   = ()  => {
+            
+    if(  icon1 == 'eye-slash') {
+     
+      onChangeIcon1('eye')  ; 
+      onChangeVisibility1( false) ; 
+
+    }else if(    icon1 == 'eye') {
+
+      onChangeIcon1('eye-slash')  ; 
+      onChangeVisibility1( true ) ; 
+    }
+        
+   }  ;  
+
+    
+   const handlePasswordVisibility2   = ()  => {
+            
+    if(  icon2 == 'eye-slash') {
+     
+      onChangeIcon2('eye')  ; 
+      onChangeVisibility2( false) ; 
+
+    }else if(    icon2 == 'eye') {
+
+      onChangeIcon2('eye-slash')  ; 
+      onChangeVisibility2( true ) ; 
+    }
+        
+   }  ;  
+
+
+
+
   
    const handler1   = ()  => {
                
@@ -62,8 +106,10 @@ export default function LogIn(   {  route  ,  navigation  }) {
     onChangeLogin(  false)  ; 
         
    }  ;   
-    
-   
+      
+
+
+  
 
   //  admin api  (  signup  )
    
@@ -73,7 +119,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
       const getdata =  async () => {  
 
    try {
-     const response = await fetch( 'http://10.0.2.2:8000/admin/registeradmin'  , 
+     const response = await fetch( 'http://clean-sundarbans.com:5000/admin/registeradmin'  , 
      {   method: 'POST', 
 
          headers: {
@@ -94,19 +140,25 @@ export default function LogIn(   {  route  ,  navigation  }) {
 }
     );
      const json = await response.json();
-       console.log(json.message);     
+       console.log(json);     
 
-      // if( json.message  === "Registered Successfully.") {
-               
-          
+     if( json.status  === "success") {
+   
+        alert(  json.message)  ; 
         console.log( "vbvhv")  ; 
-       //  onChangeLogin(  true)  ; 
+        onChangeLogin(  true)  ;  
+        
+        onChangeName("") ;
+        onChangeEmail("") ;
+        onChangeOrganization("");
+        onChangePassword("");
+        onChangePassword1("");
 
-      // } else {
+      } else {
            
-      //   console.log(   json.message )  ;  
+        alert(  json.message)  ; 
 
-     //  }
+      }
    } catch (error) {
      console.error(error);
    }  
@@ -132,7 +184,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
     const getdata1 =  async () => {  
 
      try {
-     const response = await fetch( 'http://10.0.2.2:8000/admin/loginadmin'  , 
+     const response = await fetch( 'http://clean-sundarbans.com:5000/admin/loginadmin'  , 
     {   method: 'POST', 
 
         headers: {
@@ -150,14 +202,24 @@ body: JSON.stringify({
 }),
 }
 ); 
- const json = await response.json();
-   //console.log(json);     
+ const json = await response.json(); 
+
+
+   console.log(json);     
    
-  if(  json.status === "success"){
+  if(  json.status === "success"){ 
+
+    alert(  json.message)  ; 
     navigation.navigate("Home"  , { token  : json.data.token  })   ; 
    // console.log(json.data.token);    
 
-  }  
+   onChangeEmail1("") ;
+   onChangePassword2("") ; 
+ 
+  }else {
+
+      alert(  json.message)  ; 
+  }
 
 } catch (error) {
  console.error(error);
@@ -173,6 +235,10 @@ getdata1()  ;
 
 }; 
 
+  
+
+
+   
 
     
        
@@ -182,8 +248,8 @@ getdata1()  ;
       <View style={styles.container}>
           
 
-       <StatusBar  barStyle="light-content" 
-       backgroundColor="#78AFEA"  />   
+       <StatusBar  barStyle="dark-content" 
+       backgroundColor="#fff"  />   
     
 
 
@@ -193,45 +259,65 @@ getdata1()  ;
 <View style={styles.v1} > 
    
    <View style={styles.v2} >
+   
 
+   <View style={styles.ip6} >
    <Text style={styles.t1}>Welcome Back!</Text>
-    
-    
-   <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip1} 
-              placeholder="Email Address"    value= { email1 }  onChangeText= { onChangeEmail1 } />
+    </View>
+     
 
+     <View  style={styles.ip1} >
+   <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+     placeholder="Email Address"    value= { email1 }  onChangeText= { onChangeEmail1 } />
+  
+    <View  style={styles.tip2}  >
+    <Icon  name="envelope" size={27}  color = { 'grey'} /> 
+      </View>
 
-<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.ip2} 
-            placeholder="Password"  value= { Password2  }   onChangeText = {  onChangePassword2}/>        
+ </View>
+  
 
-  <View  style={styles.v3}>
+  <View   style={styles.ip2}>
+<TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
+        secureTextEntry={visible }    placeholder="Password"  value= { Password2  }   onChangeText = {  onChangePassword2}/>        
+  
+   < TouchableOpacity style = { styles.tip2} 
+     onPress = { () => {  handlePasswordVisibility()}}
+   > 
+   <Icon  name={ icon } size={27}   color = { 'grey'} /> 
+
+    </TouchableOpacity>
+  </View>
+  {/* <View  style={styles.v3}>
   <Icon     name="check"  style={{ backgroundColor : "#333D79"   , color : "#fff", padding : 5 ,  }}      size={22} /> 
 <Text> Remember me</Text>      
 
 <TouchableOpacity  
-   onPress = {  ( ) => { navigation.navigate("Hm")}}>
+  >
 <Text>Forgot Password?</Text>
 </TouchableOpacity>
     
-  </View > 
+  </View >  */}
   
     
 
       <TouchableOpacity style={styles.to1}  
             onPress = {  submit2 }> 
        
-        <Text>Log In</Text>
+        <Text style={styles.t3}  >Log In</Text>
       </TouchableOpacity>
     
-      <Text  style={styles.t2}>  
+
+      <View style={styles.v4}  >
+      <Text   style = { styles.t6}>  
       Don’t have an account?
       </Text>    
 
-     <TouchableOpacity style={styles.to2}  
+     <TouchableOpacity 
          onPress = {  ()  =>  { handler2() }} >
-       <Text >Sign Up here.</Text>
+       <Text   style = { styles.t5}>Sign Up here.</Text>
       </TouchableOpacity>    
-
+       </View>
 
    </View>  
   
@@ -252,10 +338,13 @@ getdata1()  ;
  <View  style={styles.ip1}  >
     
  <TextInput  autoCapitalize='none'   autoCorrect={ false}   style={styles.tip1}    
-         placeholder="Name"  value= {   name }   onChangeText = {onChangeName   }/>    
+            placeholder="Name"  value= {   name }   onChangeText = {onChangeName }  
+              
+            />    
      
-     <View  style={styles.tip2}    > 
-     <Icon  name="user" size={27} /> 
+     <View  style={styles.tip2}  
+       > 
+     <Icon  name="user" size={27}  color = { 'grey'} /> 
       </View>
  
   </View> 
@@ -266,11 +355,11 @@ getdata1()  ;
 <View  style={styles.ip2}  >  
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
-                   placeholder="Email Address"   value= { email }   onChangeText = {  onChangeEmail } />
+                 placeholder="Email Address"   value= { email }   onChangeText = {  onChangeEmail } />
   
  
   <View  style={styles.tip2} > 
-  <Icon  name="envelope" size={27} /> 
+  <Icon  name="envelope" size={27}   color = { 'grey'} /> 
   </View>
     
   </View>  
@@ -281,11 +370,13 @@ getdata1()  ;
 <View  style={styles.ip3}  >   
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
-         placeholder="Password"  value= { password }  onChangeText = {  onChangePassword} />        
+    secureTextEntry={ visible1}         placeholder="Password"  value= { password }  onChangeText = {  onChangePassword} />        
 
-<View  style={styles.tip2} > 
-  <Icon  name="eye-slash" size={27} /> 
-  </View>
+<TouchableOpacity  style={styles.tip2} 
+  onPress={ () => {  handlePasswordVisibility1()}}
+> 
+  <Icon  name= { icon1} size={27}   color = { 'grey'}/> 
+  </TouchableOpacity>
     
 </View>    
 
@@ -295,12 +386,13 @@ getdata1()  ;
 
 <View  style={styles.ip4}  >   
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
-         placeholder="Re-enter  Password"  value= { password1  }  onChangeText = {  onChangePassword1 }/>    
+         secureTextEntry={ visible2}         placeholder="Re-enter  Password"  value= { password1  }  onChangeText = {  onChangePassword1 }/>    
 
-<View  style={styles.tip2} >  
-
-  <Icon  name="eye-slash" size={27} /> 
-  </View>
+<TouchableOpacity style={styles.tip2} 
+  onPress={ () => {  handlePasswordVisibility2()}}
+>  
+  <Icon  name= {icon2} size={27}   color = { 'grey'}/> 
+  </TouchableOpacity>
 </View>   
   
 
@@ -309,11 +401,11 @@ getdata1()  ;
 <View  style={styles.ip5}  >   
 
 <TextInput  autoCapitalize='none'   autoCorrect={ false}  style={styles.tip1} 
-         placeholder="Organisation Name"  value= { organization }   onChangeText = {  onChangeOrganization }  />      
+        placeholder="Organisation Name"  value= { organization }   onChangeText = {  onChangeOrganization }  />      
 
 <View  style={styles.tip2} >  
 
-<Icon  name="building" size={27} /> 
+<Icon  name="building" size={27}   color = { 'grey'}/> 
 </View>
 </View>
 
@@ -321,22 +413,22 @@ getdata1()  ;
 
    <TouchableOpacity style={styles.to3}  
    onPress = {  submit1 }>
-     <Text>Sign Up</Text>
+     <Text style={styles.t3} >Sign Up</Text>
    </TouchableOpacity>  
 
 
- 
-   <Text  style={styles.t4}>  
+  <View style={styles.v5}  >
+   <Text  style= { styles.t6}>  
    Already have an account?
    </Text>    
 
-  <TouchableOpacity style={styles.to4}   
+  <TouchableOpacity  
            onPress = {  ()  =>  { handler1() }}
   >
-    <Text >Login here.</Text>
+    <Text  style= { styles.t5} >Login here.</Text>
    </TouchableOpacity>    
 
-
+ </View>
 </View>  
 
 
@@ -392,7 +484,30 @@ getdata1()  ;
      justifyContent : "space-between"  ,  
      alignItems : 'center'  , 
 
+   }    , 
+
+   v4 : {
+
+    position : "absolute"  , 
+    top : "57%"  , 
+    backgroundColor : "#fff"  , 
+    flexDirection : "row"  , 
+
+
    }  
+
+    , 
+
+    v5 : {
+        
+
+      position : "absolute"  , 
+      top : "77%"  , 
+      backgroundColor : "#fff"  , 
+      flexDirection : "row"  ,
+
+
+    }
    ,    
 
    t1 : {
@@ -400,10 +515,13 @@ getdata1()  ;
     position : "absolute"  , 
     top : "2%"  , 
      fontWeight: '600' ,
+     color :"#333D79"  , 
      fontStyle: 'normal'  , 
     fontSize: 30 , 
    lineHeight: 34 ,
    letterSpacing: -0.408 ,
+
+
   }  , 
     
 
@@ -418,7 +536,23 @@ getdata1()  ;
    fontStyle: 'normal'  , 
    letterSpacing: -0.408 ,
 
+  }   ,   
+
+  t3 : {
+
+    color : "#FFFFFF"  ,
+    fontWeight: '600' ,
+   fontStyle: 'normal'  , 
+   fontSize : 16 , 
+   lineHeight: 22 , 
+   textAlign: 'center' , 
+   letterSpacing: -0.41 ,
+
+
   }   , 
+
+
+
   
   t4 : {
       
@@ -432,14 +566,37 @@ getdata1()  ;
    letterSpacing: -0.408 ,
 
 
-  }  , 
+  }  ,  
+
+  t5 : {
+   
+    color: "#333D79" , 
+     fontWeight: '600' ,
+   fontStyle: 'normal'  , 
+   letterSpacing: -0.408 ,
+   lineHeight: 22 , 
+
+    
+  }  ,  
+
+  t6: {
+   
+   paddingRight : 8 , 
+  color: "#333D79" , 
+  fontStyle: 'normal'  , 
+  letterSpacing: -0.408 ,
+  lineHeight: 22 , 
+
+   
+ }  , 
   
 
    tip1 : {
     
-    width :"90%"  , 
+    width :"85%"  , 
     height : "100%" ,   
     borderRadius : 10 ,  
+    color :  "#000"  , 
 
 
 
@@ -447,7 +604,7 @@ getdata1()  ;
   
    tip2 : { 
     height :"100%"  , 
-    width : "10%"  , 
+    width : "15%"  , 
   alignItems : "center"  , 
   justifyContent : "center"  , 
 
@@ -460,7 +617,7 @@ getdata1()  ;
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-  
+     paddingLeft : 15 , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
@@ -471,7 +628,8 @@ getdata1()  ;
   }  ,   
 
   ip2 : {
-     
+    
+    paddingLeft : 15 , 
     position : "absolute"  , 
     top : "25%"  ,
     flex : -1 ,
@@ -494,7 +652,7 @@ getdata1()  ;
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
-   
+    paddingLeft : 15 , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
@@ -513,7 +671,7 @@ getdata1()  ;
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,   
-
+    paddingLeft : 15 , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
@@ -530,7 +688,7 @@ getdata1()  ;
     flex : -1 ,
     width : "100%" ,
     height : "7%" ,  
- 
+    paddingLeft : 15 , 
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
@@ -559,16 +717,13 @@ getdata1()  ;
     flex : -1 ,
     width : "70%" ,
     height : "7%" ,  
-     
-
     textAlign : "left"  , 
     borderColor : "grey"  , 
     borderWidth : 1 , 
     borderRadius : 10 ,    
-    backgroundColor : "#333D79"  , 
-    flexDirection :  "row"   ,  
-    justifyContent : "space-around"  ,
-
+    backgroundColor : "#333D79"  ,  
+    justifyContent : "center"  ,
+    alignItems : "center"
     }    , 
 
        
@@ -596,7 +751,10 @@ getdata1()  ;
       height : "7%" ,  
       paddingLeft : 15 , 
       textAlign : "left"  ,  
-      backgroundColor : "#333D79"
+      backgroundColor : "#333D79" , 
+      alignItems : "center"  , 
+      justifyContent : "center" , 
+      borderRadius : 10 , 
 
       }    ,   
 
