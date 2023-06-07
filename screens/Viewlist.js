@@ -78,8 +78,8 @@ export default function Viewlist( {  route  ,  navigation  }) {
     
     console.log( "handler1") ;
     
-    if(  pageNo >= 2){
-
+    if(  pageNo >= 2){ 
+      
       setPageNo(  pageNo - 1)  ; 
     }
         

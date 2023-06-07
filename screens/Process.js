@@ -57,7 +57,9 @@ export default function  Process(  {  route  ,  navigation  }) {
   const [ dropdownValue1  , setDropdownValue1] = React.useState(""); 
   const [ dropdownValue2  , setDropdownValue2] = React.useState(""); 
  
-  React.useEffect(() => {
+  React.useEffect(() => {  
+
+    
     (async () => {
       
       let { status } = await Location.requestForegroundPermissionsAsync(); 
