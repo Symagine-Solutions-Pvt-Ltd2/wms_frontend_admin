@@ -28,7 +28,7 @@ export default function  UserRequest ( {  route  ,  navigation  }) {
  // console.log( route.params.token)  ; 
   const token =  route.params.token ; 
 
-  const  base_url  = "http://clean-sundarbans.com:5000/admin/alluserrequestview" ; 
+  const  base_url  = "http://circsol.in:5000/admin/alluserrequestview" ; 
     
   
 
@@ -54,9 +54,9 @@ export default function  UserRequest ( {  route  ,  navigation  }) {
       const json = await response.json();
 
         
-     // console.log("ayhusgg") ;   
+     console.log("ayhusgg") ;   
 
-   //   console.log( json ) ; 
+        console.log( json ) ; 
 
       if( json.message === "Invalid Token"){
              
@@ -66,7 +66,9 @@ export default function  UserRequest ( {  route  ,  navigation  }) {
         
 
       }else{
-       
+          
+
+
         setData( json.data) ;
         alert( json.message) ; 
       }  
@@ -76,11 +78,27 @@ export default function  UserRequest ( {  route  ,  navigation  }) {
       console.error(error);
     }  
   };
+  
 
-  useEffect(() => {
+
+
+
+  
+  useEffect(() => {  
+
+
+
+
+
+
+
+
+
+
+
     getData();  
 
-  }, [  pageNo  ]);
+  }, [ pageNo  , modalVisible]);
 
      
   
@@ -107,7 +125,7 @@ export default function  UserRequest ( {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/userstatusupdate'  , 
+      const response = await fetch( 'http://circsol.in:5000/admin/userstatusupdate'  , 
       {    
         method: 'POST', 
    
@@ -261,9 +279,9 @@ transparent={true}
           <Text style={styles.t5} > {  el.prop1 } </Text> 
            <Text style={styles.t6}> {   el.prop2}  </Text>    
 
-           <TouchableOpacity   style = { styles.to3} 
+           <TouchableOpacity   style = {  styles.to3}     disabled= { ( el.prop3 === "accepted") ? true : false }  
            onPress={ ()  => { handler1(  el.prop1 , el.prop2)}}>
-           <Text style={styles.t7}> {   el.prop3 }  </Text>
+           <Text style={ ( el.prop3 === "accepted"  )? [{ backgroundColor : "green"} ,styles.t7] :  [{ backgroundColor : "#333D79"} ,styles.t7] }> {   el.prop3 }  </Text>
             
            </TouchableOpacity>
           </View>
@@ -522,7 +540,6 @@ t7 : {
 height: "95%"  , 
 width : "100%" ,
 elevation : 5 , 
-backgroundColor : "#333D79" , 
 textAlign : "center" , 
  textAlignVertical : "center" ,
  borderRadius : 10 ,  

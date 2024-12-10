@@ -18,7 +18,7 @@ export default function Viewlist( {  route  ,  navigation  }) {
 
   let api_end =  route.params.api_end  ; 
 
-  const  base_url  = `http://clean-sundarbans.com:5000/admin/${api_end}` ; 
+  const  base_url  = `http://circsol.in:5000/admin/${api_end}` ; 
     
   
 

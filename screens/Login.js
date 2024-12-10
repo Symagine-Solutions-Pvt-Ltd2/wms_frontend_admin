@@ -106,7 +106,16 @@ export default function LogIn(   {  route  ,  navigation  }) {
     onChangeLogin(  false)  ; 
         
    }  ;   
-      
+        
+
+
+
+
+
+
+
+
+
 
 
   
@@ -114,12 +123,14 @@ export default function LogIn(   {  route  ,  navigation  }) {
   //  admin api  (  signup  )
    
   const submit1    = ()  => {
-     
+ 
+
  
       const getdata =  async () => {  
 
    try {
-     const response = await fetch( 'http://clean-sundarbans.com:5000/admin/registeradmin'  , 
+     const response = await fetch( 'http://circsol.in:5000/admin/registeradmin'  ,  
+
      {   method: 'POST', 
 
          headers: {
@@ -161,18 +172,47 @@ export default function LogIn(   {  route  ,  navigation  }) {
       }
    } catch (error) {
      console.error(error);
-   }  
- };
+   }     
 
+
+
+ 
+  } ; 
+
+  
 
   getdata()  ;   
- 
- 
-
- 
  console.log("bhjgnagxaxh")  ;  
 
-}; 
+} ; 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
  // login api  
@@ -184,7 +224,7 @@ export default function LogIn(   {  route  ,  navigation  }) {
     const getdata1 =  async () => {  
 
      try {
-     const response = await fetch( 'http://clean-sundarbans.com:5000/admin/loginadmin'  , 
+     const response = await fetch( 'http://circsol.in:5000/admin/loginadmin'  , 
     {   method: 'POST', 
 
         headers: {
@@ -201,7 +241,8 @@ body: JSON.stringify({
 
 }),
 }
-); 
+);  
+
  const json = await response.json(); 
 
 

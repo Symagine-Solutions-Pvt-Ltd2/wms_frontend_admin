@@ -128,7 +128,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/registercollector'  , 
+      const response = await fetch( 'http://circsol.in:5000/admin/registercollector'  , 
       {    
         method: 'POST', 
    
@@ -220,7 +220,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/uworkerreg'  , 
+      const response = await fetch( 'http://circsol.in:5000/admin/uworkerreg'  , 
       {    
         method: 'POST', 
    
@@ -314,7 +314,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/wmureg'  , 
+      const response = await fetch( 'http://circsol.in:5000/admin/wmureg'  , 
       {    
         method: 'POST', 
    
@@ -406,7 +406,7 @@ export default function  Process(  {  route  ,  navigation  }) {
   const pushdata =  async () => {  
 
     try {
-      const response = await fetch( 'http://clean-sundarbans.com:5000/admin/buyersreg'  , 
+      const response = await fetch( 'http://circsol.in:5000/admin/buyersreg'  , 
       {    
         method: 'POST', 
    
